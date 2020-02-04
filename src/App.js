@@ -1,9 +1,13 @@
 import React from "react";
-import logo from "./logo.svg";
+import Visualizer from "./components/visualizer/visualizer.component";
 import "./App.css";
 
 function App() {
-  return <div className="App"></div>;
+  return (
+    <div className="App">
+      <Visualizer />
+    </div>
+  );
 }
 
 export default App;

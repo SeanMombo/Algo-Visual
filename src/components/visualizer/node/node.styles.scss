@@ -1,0 +1,28 @@
+// .node {
+//   width: 100%;
+//   height: 0;
+//   padding-bottom: 100%;
+//   background-color: red;
+//   border: 1px solid black;
+// }
+
+.node {
+  background: tomato;
+  border: 1px solid black;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+  flex: 1 0 auto;
+  height: auto;
+}
+
+.node:before {
+  content: "";
+  float: left;
+  padding-top: 100%;
+}
+
+.wall {
+  background: black;
+}
