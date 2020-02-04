@@ -1,6 +1,6 @@
 {
-    "git.ignoreLimitWarning": true,
-    "files.autoSave": "onFocusChange",
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "git.ignoreLimitWarning": true,
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
