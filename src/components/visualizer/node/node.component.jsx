@@ -2,7 +2,7 @@ import React from "react";
 
 import "./node.styles.scss";
 
-class Node extends React.Component {
+export default class Node extends React.Component {
   render() {
     const {
       col,
@@ -17,7 +17,7 @@ class Node extends React.Component {
 
     return (
       <div
-        id={`${row}-${col}`}
+        id={`node-${row}-${col}`}
         className={`node ${extraClass}`}
         onMouseDown={() => onMouseDown(row, col)}
         onMouseEnter={() => onMouseEnter(row, col)}
@@ -26,5 +26,3 @@ class Node extends React.Component {
     );
   }
 }
-
-export default Node;
