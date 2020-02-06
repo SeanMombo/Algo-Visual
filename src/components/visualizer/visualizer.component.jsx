@@ -3,34 +3,42 @@ import Node from "./node/node.component";
 import { generateCave } from "../algorithms/cave";
 
 import "./visualizer.styles.scss";
-
-export const WIDTH = 60;
-export const HEIGHT = 40;
+import ControlPanel from "../control-panel/control-panel.component";
 
 class Visualizer extends React.Component {
   constructor() {
     super();
-
     this.state = {
       grid: [],
-      mouseIsPressed: false
+      mouseIsPressed: false,
+      width: 10,
+      height: 10
     };
+
+    this.handleChangeWidth = this.handleChangeWidth.bind(this);
+    this.handleChangeHeight = this.handleChangeHeight.bind(this);
+    this.visualizeCaveGeneration = this.visualizeCaveGeneration.bind(this);
+    this.nextStepInVisualization = this.nextStepInVisualization.bind(this);
   }
 
   // create initial grid
   componentDidMount() {
-    const grid = createGrid();
+    this.initGrid();
+  }
+
+  initGrid() {
+    const grid = this.createGrid();
     this.setState({ grid });
   }
 
   handleMouseDown(row, col) {
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({ grid: newGrid, mouseIsPressed: true });
   }
 
   handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({ grid: newGrid });
   }
 
@@ -38,15 +46,40 @@ class Visualizer extends React.Component {
     this.setState({ mouseIsPressed: false });
   }
 
+  handleChangeWidth(w) {
+    this.setState({ width: w });
+  }
+  handleChangeHeight(h) {
+    this.setState({ height: h });
+  }
+
   visualizeCaveGeneration() {
-    const boolGrid = generateCave(this.state.grid);
+    const grid = this.createGrid();
+
+    this.setState({ grid }, function() {
+      const boolGrid = generateCave(
+        this.state.grid,
+        this.state.width,
+        this.state.height
+      );
+      this.animateCaveGeneration(boolGrid);
+    });
+  }
+
+  nextStepInVisualization() {
+    const boolGrid = generateCave(
+      this.state.grid,
+      this.state.width,
+      this.state.height
+    );
     this.animateCaveGeneration(boolGrid);
   }
 
   animateCaveGeneration(boolGrid) {
-    const t = 0.5;
-    for (let row = 0; row < HEIGHT; row++) {
-      for (let col = 0; col < WIDTH; col++) {
+    // const t = 0.5;
+    const t = 0.3;
+    for (let row = 0; row < this.state.height; row++) {
+      for (let col = 0; col < this.state.width; col++) {
         const val = boolGrid[row][col];
         const el = document.getElementById(`node-${row}-${col}`);
         setTimeout(() => {
@@ -54,8 +87,8 @@ class Visualizer extends React.Component {
             val === 1 ||
             row === 0 ||
             col === 0 ||
-            row === HEIGHT - 1 ||
-            col === WIDTH - 1
+            row === this.state.height - 1 ||
+            col === this.state.width - 1
           ) {
             el.classList.add("wall");
           } else {
@@ -63,20 +96,20 @@ class Visualizer extends React.Component {
           }
 
           el.classList.add("visited");
-        }, t * col + row * (t * WIDTH));
+        }, t * col + row * (t * this.state.width));
 
         setTimeout(() => {
           el.classList.remove("visited");
-        }, t * col + row * (t * WIDTH) + 20);
+        }, t * col + row * (t * this.state.width) + 20);
       }
     }
     setTimeout(() => {
-      for (let row = 0; row < HEIGHT; row++) {
-        for (let col = 0; col < WIDTH; col++) {
-          setNewGrid(this.state.grid, row, col, boolGrid[row][col]);
+      for (let row = 0; row < this.state.height; row++) {
+        for (let col = 0; col < this.state.width; col++) {
+          this.setNewGrid(this.state.grid, row, col, boolGrid[row][col]);
         }
       }
-    }, t * HEIGHT * WIDTH);
+    }, t * this.state.height * this.state.width);
 
     // for (let i = 0; i <= visitedNodesInOrder.length; i++) {
     //   setTimeout(() => {
@@ -86,15 +119,20 @@ class Visualizer extends React.Component {
     //   }, 10 * i);
     // }
   }
+
   render() {
-    const { grid, mouseIsPressed } = this.state;
+    const { grid, mouseIsPressed, width, height } = this.state;
 
     return (
       <>
-        <button onClick={() => this.visualizeCaveGeneration()}>
-          Generate Cave
-        </button>
-
+        <ControlPanel
+          width={width}
+          height={height}
+          onChangeWidth={this.handleChangeWidth}
+          onChangeHeight={this.handleChangeHeight}
+          visualizeCaveGeneration={this.visualizeCaveGeneration}
+          nextStepInVisualization={this.nextStepInVisualization}
+        />
         <div className="grid">
           {grid.map((row, rowIx) => {
             return (
@@ -123,55 +161,55 @@ class Visualizer extends React.Component {
       </>
     );
   }
-}
 
-const createNode = (row, col) => {
-  return {
-    row,
-    col,
-    isWall:
-      Math.random() > 0.55 ||
-      row === 0 ||
-      col === 0 ||
-      row === HEIGHT - 1 ||
-      col === WIDTH - 1
-        ? true
-        : false
+  createNode = (row, col) => {
+    return {
+      row,
+      col,
+      isWall:
+        Math.random() > 0.55 ||
+        row === 0 ||
+        col === 0 ||
+        row === this.state.height - 1 ||
+        col === this.state.width - 1
+          ? true
+          : false
+    };
   };
-};
 
-const createGrid = () => {
-  const grid = [];
-  for (let row = 0; row < HEIGHT; row++) {
-    const currentRow = [];
-    for (let col = 0; col < WIDTH; col++) {
-      currentRow.push(createNode(row, col));
+  createGrid = () => {
+    const grid = [];
+    for (let row = 0; row < this.state.height; row++) {
+      const currentRow = [];
+      for (let col = 0; col < this.state.width; col++) {
+        currentRow.push(this.createNode(row, col));
+      }
+      grid.push(currentRow);
     }
-    grid.push(currentRow);
-  }
-  return grid;
-};
-
-const getNewGridWithWallToggled = (grid, row, col) => {
-  const newGrid = grid.slice();
-  const node = newGrid[row][col];
-  const newNode = {
-    ...node,
-    isWall: !node.isWall
+    return grid;
   };
-  newGrid[row][col] = newNode;
-  return newGrid;
-};
 
-const setNewGrid = (grid, row, col, val) => {
-  const newGrid = grid.slice();
-  const node = newGrid[row][col];
-  const newNode = {
-    ...node,
-    isWall: val
+  getNewGridWithWallToggled = (grid, row, col) => {
+    const newGrid = grid.slice();
+    const node = newGrid[row][col];
+    const newNode = {
+      ...node,
+      isWall: !node.isWall
+    };
+    newGrid[row][col] = newNode;
+    return newGrid;
   };
-  newGrid[row][col] = newNode;
-  return newGrid;
-};
+
+  setNewGrid = (grid, row, col, val) => {
+    const newGrid = grid.slice();
+    const node = newGrid[row][col];
+    const newNode = {
+      ...node,
+      isWall: val
+    };
+    newGrid[row][col] = newNode;
+    return newGrid;
+  };
+}
 
 export default Visualizer;

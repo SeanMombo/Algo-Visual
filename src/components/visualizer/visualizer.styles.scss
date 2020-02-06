@@ -1,6 +1,9 @@
 .grid {
   margin: auto;
-  width: 80%;
+  width: 50%;
+  // height: 100%;
+  border-radius: 8px;
+  -moz-border-radius: 8px;
 }
 
 .rowContainer {
@@ -11,4 +14,8 @@
   flex-flow: row;
   -webkit-flex-flow: row;
   justify-content: space-around;
+}
+
+button {
+  height: 32px;
 }

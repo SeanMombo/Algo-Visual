@@ -1,16 +1,14 @@
-import { WIDTH, HEIGHT } from "../visualizer/visualizer.component";
-
 const lodash = require("lodash");
 
 const birthLimit = 4;
 const deathLimit = 3;
 
-export function generateCave(grid) {
+export function generateCave(grid, WIDTH, HEIGHT) {
   const clone = Array.from(Array(HEIGHT), () => new Array(WIDTH));
-
+  console.log(grid, WIDTH, HEIGHT);
   for (let row = 1; row < HEIGHT - 1; row++) {
     for (let col = 1; col < WIDTH - 1; col++) {
-      const nbs = getSum(grid, row, col);
+      const nbs = getSum(grid, row, col, WIDTH, HEIGHT);
 
       if (grid[row][col].isWall) {
         if (nbs < deathLimit) {
@@ -31,7 +29,7 @@ export function generateCave(grid) {
   return clone;
 }
 
-function getSum(grid, row, col) {
+function getSum(grid, row, col, WIDTH, HEIGHT) {
   let sum = 0;
   for (let j = -1; j <= 1; j++) {
     for (let i = -1; i <= 1; i++) {

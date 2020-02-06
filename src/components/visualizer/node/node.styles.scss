@@ -7,8 +7,8 @@
 // }
 
 .node {
-  background: #e2715d;
-  //   border: 0.5px solid black;
+  background: #f3e4e9;
+  border: 0.5px dashed rgb(41, 27, 30);
   color: white;
 
   flex: 1 0 auto;
@@ -26,5 +26,5 @@
 }
 
 .visited {
-  background-color: rgb(235, 180, 31);
+  background-color: rgba(255, 19, 19, 1);
 }
