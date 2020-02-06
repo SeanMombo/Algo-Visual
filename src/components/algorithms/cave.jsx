@@ -1,11 +1,27 @@
-const lodash = require("lodash");
-
 const birthLimit = 4;
 const deathLimit = 3;
 
+export function initCave(grid, WIDTH, HEIGHT) {
+  const clone = Array.from(Array(HEIGHT), () => new Array(WIDTH));
+  for (let row = 0; row < HEIGHT; row++) {
+    for (let col = 0; col < WIDTH; col++) {
+      console.log(grid[row][col]);
+      console.log(WIDTH, col, HEIGHT, row);
+      Math.random() > 0.55 ||
+      row === 0 ||
+      col === 0 ||
+      row === HEIGHT - 1 ||
+      col === WIDTH - 1
+        ? (clone[row][col] = 1)
+        : (clone[row][col] = 0);
+    }
+  }
+  return clone;
+}
+
 export function generateCave(grid, WIDTH, HEIGHT) {
   const clone = Array.from(Array(HEIGHT), () => new Array(WIDTH));
-  console.log(grid, WIDTH, HEIGHT);
+  // console.log(grid, WIDTH, HEIGHT);
   for (let row = 1; row < HEIGHT - 1; row++) {
     for (let col = 1; col < WIDTH - 1; col++) {
       const nbs = getSum(grid, row, col, WIDTH, HEIGHT);
@@ -25,7 +41,6 @@ export function generateCave(grid, WIDTH, HEIGHT) {
       }
     }
   }
-
   return clone;
 }
 

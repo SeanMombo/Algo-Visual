@@ -1,9 +1,21 @@
+$bg: #ebebeb;
+$grey: #d3d3d3;
+$orange: #ff652f;
+$yellow: #ffe400;
+$green: #14a76c;
+
+body {
+  background-color: $bg;
+}
+
 .grid {
   margin: auto;
   width: 50%;
   // height: 100%;
-  border-radius: 8px;
-  -moz-border-radius: 8px;
+  border: 2px solid black;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  overflow: hidden;
 }
 
 .rowContainer {
@@ -14,8 +26,4 @@
   flex-flow: row;
   -webkit-flex-flow: row;
   justify-content: space-around;
-}
-
-button {
-  height: 32px;
 }

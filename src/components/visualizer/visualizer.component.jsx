@@ -1,6 +1,6 @@
 import React from "react";
 import Node from "./node/node.component";
-import { generateCave } from "../algorithms/cave";
+import { generateCave, initCave } from "../algorithms/cave";
 
 import "./visualizer.styles.scss";
 import ControlPanel from "../control-panel/control-panel.component";
@@ -19,18 +19,20 @@ class Visualizer extends React.Component {
     this.handleChangeHeight = this.handleChangeHeight.bind(this);
     this.visualizeCaveGeneration = this.visualizeCaveGeneration.bind(this);
     this.nextStepInVisualization = this.nextStepInVisualization.bind(this);
+    this.killAllTimeouts = this.killAllTimeouts.bind(this);
   }
 
   // create initial grid
   componentDidMount() {
-    this.initGrid();
+    this.initGrid(true);
   }
 
-  initGrid() {
-    const grid = this.createGrid();
+  initGrid(isEmpty) {
+    const grid = this.createGrid(isEmpty);
     this.setState({ grid });
   }
 
+  //// EVENT LISTENERS ////////////////////
   handleMouseDown(row, col) {
     const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({ grid: newGrid, mouseIsPressed: true });
@@ -53,16 +55,24 @@ class Visualizer extends React.Component {
     this.setState({ height: h });
   }
 
-  visualizeCaveGeneration() {
-    const grid = this.createGrid();
+  killAllTimeouts() {
+    var highestTimeoutId = setTimeout(";");
+    for (var i = 0; i < highestTimeoutId; i++) {
+      clearTimeout(i);
+    }
+  }
 
-    this.setState({ grid }, function() {
-      const boolGrid = generateCave(
-        this.state.grid,
-        this.state.width,
-        this.state.height
-      );
-      this.animateCaveGeneration(boolGrid);
+  visualizeCaveGeneration(w) {
+    this.setState({ width: w, height: w }, function() {
+      const grid = this.createGrid(true);
+      this.setState({ grid }, function() {
+        const boolGrid = initCave(
+          this.state.grid,
+          this.state.width,
+          this.state.height
+        );
+        this.animateCaveGeneration(boolGrid);
+      });
     });
   }
 
@@ -77,7 +87,7 @@ class Visualizer extends React.Component {
 
   animateCaveGeneration(boolGrid) {
     // const t = 0.5;
-    const t = 0.3;
+    const t = Math.min(1, 1000 / (this.state.width * this.state.width));
     for (let row = 0; row < this.state.height; row++) {
       for (let col = 0; col < this.state.width; col++) {
         const val = boolGrid[row][col];
@@ -100,7 +110,7 @@ class Visualizer extends React.Component {
 
         setTimeout(() => {
           el.classList.remove("visited");
-        }, t * col + row * (t * this.state.width) + 20);
+        }, t * col + row * (t * this.state.width) + t * 40);
       }
     }
     setTimeout(() => {
@@ -110,15 +120,9 @@ class Visualizer extends React.Component {
         }
       }
     }, t * this.state.height * this.state.width);
-
-    // for (let i = 0; i <= visitedNodesInOrder.length; i++) {
-    //   setTimeout(() => {
-    //     const node = visitedNodesInOrder[i];
-    //     document.getElementById(`node-${node.row}-${node.col}`).className =
-    //       'node node-visited';
-    //   }, 10 * i);
-    // }
   }
+
+  ////////////////////////////////////////
 
   render() {
     const { grid, mouseIsPressed, width, height } = this.state;
@@ -132,6 +136,7 @@ class Visualizer extends React.Component {
           onChangeHeight={this.handleChangeHeight}
           visualizeCaveGeneration={this.visualizeCaveGeneration}
           nextStepInVisualization={this.nextStepInVisualization}
+          killAllTimeouts={this.killAllTimeouts}
         />
         <div className="grid">
           {grid.map((row, rowIx) => {
@@ -162,27 +167,21 @@ class Visualizer extends React.Component {
     );
   }
 
-  createNode = (row, col) => {
+  //// GRID FUNCTIONS
+  createNode = (row, col, isEmpty) => {
     return {
       row,
       col,
-      isWall:
-        Math.random() > 0.55 ||
-        row === 0 ||
-        col === 0 ||
-        row === this.state.height - 1 ||
-        col === this.state.width - 1
-          ? true
-          : false
+      isWall: false
     };
   };
 
-  createGrid = () => {
+  createGrid = isEmpty => {
     const grid = [];
     for (let row = 0; row < this.state.height; row++) {
       const currentRow = [];
       for (let col = 0; col < this.state.width; col++) {
-        currentRow.push(this.createNode(row, col));
+        currentRow.push(this.createNode(row, col, isEmpty));
       }
       grid.push(currentRow);
     }

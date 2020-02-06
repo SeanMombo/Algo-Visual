@@ -1,5 +1,6 @@
 import React from "react";
 import Visualizer from "./components/visualizer/visualizer.component";
+import Navbar from "react-bootstrap/Navbar";
 // import ControlPanel from "./components/control-panel/control-panel.component";
 import "./App.css";
 
@@ -16,7 +17,12 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Visualizer />
+        <div className="wrapper3">
+          <h1>Cellular Automata Cave Generation</h1>
+        </div>
+        <div className="wrapper2">
+          <Visualizer />
+        </div>
       </div>
     );
   }
