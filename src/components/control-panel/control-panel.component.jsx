@@ -13,14 +13,14 @@ import "./control-panel.styles.scss";
 class ControlPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.size = 20;
+    this.size = 10;
     this.initChance = 0.45;
 
     this.birthLimit = 4;
     this.deathLimit = 3;
 
     this.state = {
-      size: 20,
+      size: 10,
       initChance: 0.45,
       birthLimit: 4,
       deathLimit: 3
@@ -81,6 +81,53 @@ class ControlPanel extends React.Component {
     this.setState({ deathLimit });
   }
 
+  incSize() {
+    this.size += 5;
+    if (this.size > 100) this.size = 100;
+    this.setState({ size: this.size });
+  }
+  decSize() {
+    this.size -= 5;
+
+    if (this.size < 0) this.size = 0;
+    this.setState({ size: this.size });
+  }
+
+  incChance() {
+    this.initChance += 0.05;
+    this.initChance = Math.round(this.initChance * 100) / 100;
+    if (this.initChance > 1) this.initChance = 1;
+    this.setState({ initChance: this.initChance });
+  }
+  decChance() {
+    this.initChance -= 0.05;
+    this.initChance = Math.round(this.initChance * 100) / 100;
+    if (this.initChance < 0) this.initChance = 0;
+    this.setState({ initChance: this.initChance });
+  }
+
+  incBirth() {
+    this.birthLimit += 1;
+    if (this.birthLimit > 8) this.birthLimit = 8;
+    this.setState({ birthLimit: this.birthLimit });
+  }
+  decBirth() {
+    this.birthLimit -= 1;
+    if (this.birthLimit < 0) this.birthLimit = 0;
+    this.setState({ birthLimit: this.birthLimit });
+  }
+
+  incDeath() {
+    this.deathLimit += 1;
+    if (this.deathLimit > 8) this.deathLimit = 8;
+    this.setState({ deathLimit: this.deathLimit });
+  }
+  decDeath() {
+    this.deathLimit -= 1;
+    if (this.deathLimit < 0) this.deathLimit = 0;
+    this.setState({ deathLimit: this.deathLimit });
+  }
+
   render() {
     const { width, height, visualizeCaveGeneration } = this.props;
 
@@ -95,16 +142,29 @@ class ControlPanel extends React.Component {
               <Form.Label>Grid Size</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
-                  <Button variant="outline-secondary">-</Button>
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={this.decSize.bind(this)}
+                  >
+                    -
+                  </Button>
                 </InputGroup.Prepend>
                 <Form.Control
+                  size="sm"
                   type="text"
                   placeholder="0-100"
                   value={this.state.size}
                   onChange={this.updateSize.bind(this)}
                 />
                 <InputGroup.Append>
-                  <Button variant="outline-secondary">+</Button>
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={this.incSize.bind(this)}
+                  >
+                    +
+                  </Button>
                 </InputGroup.Append>
               </InputGroup>
             </Form.Group>
@@ -113,16 +173,29 @@ class ControlPanel extends React.Component {
               <Form.Label>Initial Wall %</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
-                  <Button variant="outline-secondary">-</Button>
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={this.decChance.bind(this)}
+                  >
+                    -
+                  </Button>
                 </InputGroup.Prepend>
                 <Form.Control
+                  size="sm"
                   type="text"
                   placeholder="0.0-1.0"
                   value={this.state.initChance}
                   onChange={this.updateChance.bind(this)}
                 />
                 <InputGroup.Append>
-                  <Button variant="outline-secondary">+</Button>
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={this.incChance.bind(this)}
+                  >
+                    +
+                  </Button>
                 </InputGroup.Append>
               </InputGroup>
             </Form.Group>
@@ -133,16 +206,29 @@ class ControlPanel extends React.Component {
               <Form.Label>Birth Limit</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
-                  <Button variant="outline-secondary">-</Button>
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={this.decBirth.bind(this)}
+                  >
+                    -
+                  </Button>
                 </InputGroup.Prepend>
                 <Form.Control
+                  size="sm"
                   type="text"
                   placeholder="0-8"
                   value={this.state.birthLimit}
                   onChange={this.updateBirth.bind(this)}
                 />
                 <InputGroup.Append>
-                  <Button variant="outline-secondary">+</Button>
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={this.incBirth.bind(this)}
+                  >
+                    +
+                  </Button>
                 </InputGroup.Append>
               </InputGroup>
             </Form.Group>
@@ -151,16 +237,29 @@ class ControlPanel extends React.Component {
               <Form.Label>Death Limit</Form.Label>
               <InputGroup>
                 <InputGroup.Prepend>
-                  <Button variant="outline-secondary">-</Button>
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={this.decDeath.bind(this)}
+                  >
+                    -
+                  </Button>
                 </InputGroup.Prepend>
                 <Form.Control
+                  size="sm"
                   type="text"
                   placeholder="0-8"
                   value={this.state.deathLimit}
                   onChange={this.updateDeath.bind(this)}
                 />
                 <InputGroup.Append>
-                  <Button variant="outline-secondary">+</Button>
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={this.incDeath.bind(this)}
+                  >
+                    +
+                  </Button>
                 </InputGroup.Append>
               </InputGroup>
             </Form.Group>
