@@ -12,7 +12,10 @@ class Visualizer extends React.Component {
       grid: [],
       mouseIsPressed: false,
       width: 10,
-      height: 10
+      height: 10,
+      birthLimit: 4,
+      deathLimit: 3,
+      initChance: 0.45
     };
 
     this.handleChangeWidth = this.handleChangeWidth.bind(this);
@@ -62,25 +65,31 @@ class Visualizer extends React.Component {
     }
   }
 
-  visualizeCaveGeneration(w) {
-    this.setState({ width: w, height: w }, function() {
-      const grid = this.createGrid(true);
-      this.setState({ grid }, function() {
-        const boolGrid = initCave(
-          this.state.grid,
-          this.state.width,
-          this.state.height
-        );
-        this.animateCaveGeneration(boolGrid);
-      });
-    });
+  visualizeCaveGeneration(w, initChance, birthLimit, deathLimit) {
+    this.setState(
+      { width: w, height: w, birthLimit, deathLimit, initChance },
+      function() {
+        const grid = this.createGrid(true);
+        this.setState({ grid }, function() {
+          const boolGrid = initCave(
+            this.state.grid,
+            this.state.width,
+            this.state.height,
+            this.state.initChance
+          );
+          this.animateCaveGeneration(boolGrid);
+        });
+      }
+    );
   }
 
   nextStepInVisualization() {
     const boolGrid = generateCave(
       this.state.grid,
       this.state.width,
-      this.state.height
+      this.state.height,
+      this.state.birthLimit,
+      this.state.deathLimit
     );
     this.animateCaveGeneration(boolGrid);
   }

@@ -1,13 +1,10 @@
-const birthLimit = 4;
-const deathLimit = 3;
-
-export function initCave(grid, WIDTH, HEIGHT) {
+export function initCave(grid, WIDTH, HEIGHT, initChance) {
   const clone = Array.from(Array(HEIGHT), () => new Array(WIDTH));
   for (let row = 0; row < HEIGHT; row++) {
     for (let col = 0; col < WIDTH; col++) {
       console.log(grid[row][col]);
       console.log(WIDTH, col, HEIGHT, row);
-      Math.random() > 0.55 ||
+      Math.random() <= initChance ||
       row === 0 ||
       col === 0 ||
       row === HEIGHT - 1 ||
@@ -19,7 +16,7 @@ export function initCave(grid, WIDTH, HEIGHT) {
   return clone;
 }
 
-export function generateCave(grid, WIDTH, HEIGHT) {
+export function generateCave(grid, WIDTH, HEIGHT, birthLimit, deathLimit) {
   const clone = Array.from(Array(HEIGHT), () => new Array(WIDTH));
   // console.log(grid, WIDTH, HEIGHT);
   for (let row = 1; row < HEIGHT - 1; row++) {

@@ -6,21 +6,39 @@ $green: #14a76c;
 
 .control-panel {
   // border: 1px dashed rgb(30, 151, 91);
-  min-width: 5%;
-  max-width: 50%;
+  min-width: 10%;
+  max-width: 40%;
   background-color: $grey;
-  padding: 20px;
+  padding: 16px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
+
   border: 2px solid rgb(0, 0, 0);
 
   border-radius: 4px;
   -moz-border-radius: 4px;
   overflow: hidden;
 
+  input {
+    width: 80%;
+    padding: 4px !important;
+  }
+  .input-group-text {
+  }
   .bg {
     // width: 100% !important;
+  }
+  .form-group {
+    text-align: left !important;
+    button {
+    }
+  }
+  .inputLabel {
+    font-weight: bold;
+    text-align: left;
   }
 
   button {
@@ -30,6 +48,7 @@ $green: #14a76c;
   .abort {
     color: red !important;
   }
+
   * {
     // color: $orange;
     // text-align: left;
@@ -46,11 +65,11 @@ $green: #14a76c;
   // }
 
   // .input-group {
-  //   width: 100% !important;
+  //   width: 50% !important;
   // }
 
   // .form-control {
-  //   width: 50% !important;
+  //   width: 40% !important;
   // }
 
   // span.input-group-addon {
