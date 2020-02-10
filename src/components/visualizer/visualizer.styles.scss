@@ -27,3 +27,11 @@ body {
   -webkit-flex-flow: row;
   justify-content: space-around;
 }
+
+.wrapper2 {
+  margin: 50px;
+  margin-top: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}

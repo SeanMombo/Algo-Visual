@@ -77,3 +77,43 @@ $green: #14a76c;
   //   width: 50px !important;
   // }
 }
+
+@media (max-width: 768px) {
+  .wrapper2 {
+    display: inline-block;
+    padding: 4px;
+    margin: 4px;
+  }
+  .grid {
+    flex: 1;
+    order: 2;
+    width: 100%;
+  }
+  .control-panel {
+    padding: 10px;
+    margin: 0px;
+    margin-bottom: 20px;
+    min-width: 100%;
+    max-width: 100%;
+    line-height: 10px;
+
+    .form-group {
+      padding: 0px;
+      margin: 0px;
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+    .buttonWrapper {
+      button {
+        width: 30% !important;
+        margin-left: 4px;
+        margin-right: 4px;
+        margin-bottom: 16px;
+        float: left;
+
+        min-height: 100% !important;
+        max-height: 100% !important;
+      }
+    }
+  }
+}

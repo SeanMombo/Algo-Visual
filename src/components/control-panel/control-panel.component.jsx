@@ -305,16 +305,18 @@ class ControlPanel extends React.Component {
         <h2>Visualize</h2>
         <br></br>
         {/* <ButtonGroup size="lg" className="bg"> */}
-        <Button onClick={this.visualizeCaveGeneration} variant="primary">
-          Initialize Grid
-        </Button>
-        <Button onClick={this.nextStepInVisualization} variant="success">
-          Smoothing Step
-        </Button>
-        <Button onClick={this.killAllTimeouts} variant="danger">
-          Emergency Stop
-        </Button>
-        {/* </ButtonGroup> */}
+        <div className="buttonWrapper">
+          <Button onClick={this.visualizeCaveGeneration} variant="primary">
+            Initialize The Grid
+          </Button>
+          <Button onClick={this.nextStepInVisualization} variant="success">
+            Smoothing Step
+          </Button>
+          <Button onClick={this.killAllTimeouts} variant="danger">
+            Abort Visualization
+          </Button>
+          {/* </ButtonGroup> */}
+        </div>
       </div>
     );
   }
