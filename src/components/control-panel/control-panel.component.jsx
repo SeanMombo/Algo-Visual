@@ -7,6 +7,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import { Form, Row, Col } from "react-bootstrap";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import "./control-panel.styles.scss";
 
@@ -128,195 +129,166 @@ class ControlPanel extends React.Component {
     this.setState({ deathLimit: this.deathLimit });
   }
 
+  caveGen = () => (
+    <>
+      <h2>Settings</h2>
+      <br></br>
+
+      <Form>
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridSize">
+            <Form.Label>Grid Size</Form.Label>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={this.decSize.bind(this)}
+                >
+                  -
+                </Button>
+              </InputGroup.Prepend>
+              <Form.Control
+                size="sm"
+                type="text"
+                placeholder="0-100"
+                value={this.state.size}
+                onChange={this.updateSize.bind(this)}
+              />
+              <InputGroup.Append>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={this.incSize.bind(this)}
+                >
+                  +
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formGridChance">
+            <Form.Label>Initial Wall %</Form.Label>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={this.decChance.bind(this)}
+                >
+                  -
+                </Button>
+              </InputGroup.Prepend>
+              <Form.Control
+                size="sm"
+                type="text"
+                placeholder="0.0-1.0"
+                value={this.state.initChance}
+                onChange={this.updateChance.bind(this)}
+              />
+              <InputGroup.Append>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={this.incChance.bind(this)}
+                >
+                  +
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form.Group>
+        </Form.Row>
+
+        <Form.Row>
+          <Form.Group as={Col} controlId="formGridSize">
+            <Form.Label>Birth Limit</Form.Label>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={this.decBirth.bind(this)}
+                >
+                  -
+                </Button>
+              </InputGroup.Prepend>
+              <Form.Control
+                size="sm"
+                type="text"
+                placeholder="0-8"
+                value={this.state.birthLimit}
+                onChange={this.updateBirth.bind(this)}
+              />
+              <InputGroup.Append>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={this.incBirth.bind(this)}
+                >
+                  +
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formGridChance">
+            <Form.Label>Death Limit</Form.Label>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={this.decDeath.bind(this)}
+                >
+                  -
+                </Button>
+              </InputGroup.Prepend>
+              <Form.Control
+                size="sm"
+                type="text"
+                placeholder="0-8"
+                value={this.state.deathLimit}
+                onChange={this.updateDeath.bind(this)}
+              />
+              <InputGroup.Append>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={this.incDeath.bind(this)}
+                >
+                  +
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form.Group>
+        </Form.Row>
+      </Form>
+
+      <h2>Visualize</h2>
+      <br></br>
+      <div className="buttonWrapper">
+        <Button onClick={this.visualizeCaveGeneration} variant="primary">
+          Initialize The Grid
+        </Button>
+        <Button onClick={this.nextStepInVisualization} variant="success">
+          Smoothing Step
+        </Button>
+        <Button onClick={this.killAllTimeouts} variant="danger">
+          Abort Visualization
+        </Button>
+      </div>
+    </>
+  );
+
   render() {
     const { width, height, visualizeCaveGeneration } = this.props;
 
     return (
       <div className="control-panel">
-        <h2>Settings</h2>
-        <br></br>
-
-        <Form>
-          <Form.Row>
-            <Form.Group as={Col} controlId="formGridSize">
-              <Form.Label>Grid Size</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <Button
-                    size="sm"
-                    variant="outline-secondary"
-                    onClick={this.decSize.bind(this)}
-                  >
-                    -
-                  </Button>
-                </InputGroup.Prepend>
-                <Form.Control
-                  size="sm"
-                  type="text"
-                  placeholder="0-100"
-                  value={this.state.size}
-                  onChange={this.updateSize.bind(this)}
-                />
-                <InputGroup.Append>
-                  <Button
-                    size="sm"
-                    variant="outline-secondary"
-                    onClick={this.incSize.bind(this)}
-                  >
-                    +
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridChance">
-              <Form.Label>Initial Wall %</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <Button
-                    size="sm"
-                    variant="outline-secondary"
-                    onClick={this.decChance.bind(this)}
-                  >
-                    -
-                  </Button>
-                </InputGroup.Prepend>
-                <Form.Control
-                  size="sm"
-                  type="text"
-                  placeholder="0.0-1.0"
-                  value={this.state.initChance}
-                  onChange={this.updateChance.bind(this)}
-                />
-                <InputGroup.Append>
-                  <Button
-                    size="sm"
-                    variant="outline-secondary"
-                    onClick={this.incChance.bind(this)}
-                  >
-                    +
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Row>
-            <Form.Group as={Col} controlId="formGridSize">
-              <Form.Label>Birth Limit</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <Button
-                    size="sm"
-                    variant="outline-secondary"
-                    onClick={this.decBirth.bind(this)}
-                  >
-                    -
-                  </Button>
-                </InputGroup.Prepend>
-                <Form.Control
-                  size="sm"
-                  type="text"
-                  placeholder="0-8"
-                  value={this.state.birthLimit}
-                  onChange={this.updateBirth.bind(this)}
-                />
-                <InputGroup.Append>
-                  <Button
-                    size="sm"
-                    variant="outline-secondary"
-                    onClick={this.incBirth.bind(this)}
-                  >
-                    +
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridChance">
-              <Form.Label>Death Limit</Form.Label>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <Button
-                    size="sm"
-                    variant="outline-secondary"
-                    onClick={this.decDeath.bind(this)}
-                  >
-                    -
-                  </Button>
-                </InputGroup.Prepend>
-                <Form.Control
-                  size="sm"
-                  type="text"
-                  placeholder="0-8"
-                  value={this.state.deathLimit}
-                  onChange={this.updateDeath.bind(this)}
-                />
-                <InputGroup.Append>
-                  <Button
-                    size="sm"
-                    variant="outline-secondary"
-                    onClick={this.incDeath.bind(this)}
-                  >
-                    +
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form.Group>
-          </Form.Row>
-        </Form>
-        {/* <InputGroup className="mb-3">
-          
-          <FormControl
-            placeholder="Grid Size"
-            aria-label="Grid width and height set to this value"
-            value={this.state.size}
-            onChange={this.updateSize.bind(this)}
-          />
-        </InputGroup>
-
-        <InputGroup className="mb-3">
-          <FormControl
-            placeholder="Initial Chance"
-            aria-label="Chance for each cell to be alive on initialization."
-            value={this.state.size}
-            onChange={this.updateSize.bind(this)}
-          />
-        </InputGroup>
-
-        <InputGroup className="mb-3">
-          <FormControl
-            placeholder="Birth Limit"
-            aria-label="Chance for each cell to be alive on initialization."
-            value={this.state.size}
-            onChange={this.updateSize.bind(this)}
-          />
-        </InputGroup>
-
-        <InputGroup className="mb-3">
-          <FormControl
-            placeholder="Death Limit"
-            aria-label="Chance for each cell to be alive on initialization."
-            value={this.state.size}
-            onChange={this.updateSize.bind(this)}
-          />
-        </InputGroup> */}
-
-        <h2>Visualize</h2>
-        <br></br>
-        {/* <ButtonGroup size="lg" className="bg"> */}
-        <div className="buttonWrapper">
-          <Button onClick={this.visualizeCaveGeneration} variant="primary">
-            Initialize The Grid
-          </Button>
-          <Button onClick={this.nextStepInVisualization} variant="success">
-            Smoothing Step
-          </Button>
-          <Button onClick={this.killAllTimeouts} variant="danger">
-            Abort Visualization
-          </Button>
-          {/* </ButtonGroup> */}
-        </div>
+        <Router>
+          <Route exact path="/cavegen" component={this.caveGen} />
+          <Route path="/floodfill" component={this.floodFill} />
+        </Router>
       </div>
     );
   }

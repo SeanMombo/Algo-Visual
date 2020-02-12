@@ -8,12 +8,13 @@ export default class Node extends React.Component {
       col,
       row,
       isWall,
+      isStart,
       onMouseDown,
       onMouseEnter,
       onMouseUp
     } = this.props;
 
-    const extraClass = isWall ? "wall" : "";
+    const extraClass = isWall ? "wall" : isStart ? "start" : "";
 
     return (
       <div

@@ -1,9 +1,13 @@
 import React from "react";
 import Node from "./node/node.component";
 import { generateCave, initCave } from "../algorithms/cave";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import "./visualizer.styles.scss";
 import ControlPanel from "../control-panel/control-panel.component";
+
+const caveAlgo = 0;
+const floodAlgo = 1;
 
 class Visualizer extends React.Component {
   constructor() {
@@ -15,7 +19,8 @@ class Visualizer extends React.Component {
       height: 10,
       birthLimit: 4,
       deathLimit: 3,
-      initChance: 0.45
+      initChance: 0.45,
+      algo: floodAlgo
     };
 
     this.handleChangeWidth = this.handleChangeWidth.bind(this);
@@ -54,6 +59,7 @@ class Visualizer extends React.Component {
   handleChangeWidth(w) {
     this.setState({ width: w });
   }
+
   handleChangeHeight(h) {
     this.setState({ height: h });
   }
@@ -96,7 +102,7 @@ class Visualizer extends React.Component {
 
   animateCaveGeneration(boolGrid) {
     // const t = 0.5;
-    const t = Math.min(1, 1000 / (this.state.width * this.state.width));
+    const t = Math.min(70, 1000 / (this.state.width * this.state.width));
     for (let row = 0; row < this.state.height; row++) {
       for (let col = 0; col < this.state.width; col++) {
         const val = boolGrid[row][col];
@@ -119,7 +125,7 @@ class Visualizer extends React.Component {
 
         setTimeout(() => {
           el.classList.remove("visited");
-        }, t * col + row * (t * this.state.width) + t * 40);
+        }, t * col + row * (t * this.state.width) + t + 40);
       }
     }
     setTimeout(() => {
@@ -133,20 +139,53 @@ class Visualizer extends React.Component {
 
   ////////////////////////////////////////
 
+  caveGen = () => (
+    <ControlPanel
+      algo={this.state.algo}
+      width={this.state.width}
+      height={this.state.height}
+      onChangeWidth={this.handleChangeWidth}
+      onChangeHeight={this.handleChangeHeight}
+      visualizeCaveGeneration={this.visualizeCaveGeneration}
+      nextStepInVisualization={this.nextStepInVisualization}
+      killAllTimeouts={this.killAllTimeouts}
+    />
+  );
+
+  floodFill = () => (
+    <ControlPanel
+      algo={this.state.algo}
+      width={this.state.width}
+      height={this.state.height}
+      onChangeWidth={this.handleChangeWidth}
+      onChangeHeight={this.handleChangeHeight}
+      visualizeCaveGeneration={this.visualizeCaveGeneration}
+      nextStepInVisualization={this.nextStepInVisualization}
+      killAllTimeouts={this.killAllTimeouts}
+    />
+  );
+
   render() {
-    const { grid, mouseIsPressed, width, height } = this.state;
+    const { grid, mouseIsPressed, width, height, algo } = this.state;
 
     return (
       <>
-        <ControlPanel
-          width={width}
-          height={height}
-          onChangeWidth={this.handleChangeWidth}
-          onChangeHeight={this.handleChangeHeight}
-          visualizeCaveGeneration={this.visualizeCaveGeneration}
-          nextStepInVisualization={this.nextStepInVisualization}
-          killAllTimeouts={this.killAllTimeouts}
-        />
+        <Router>
+          <div className="wrapper3">
+            <ul>
+              <li>
+                <Link to="/cavegen">Cave Generation</Link>
+              </li>
+              <li>
+                <Link to="/floodfill">Flood Fill</Link>
+              </li>
+            </ul>
+          </div>
+
+          <Route exact path="/cavegen" component={this.caveGen} />
+          <Route path="/floodfill" component={this.floodFill} />
+        </Router>
+
         <div className="grid">
           {grid.map((row, rowIx) => {
             return (
