@@ -15,12 +15,13 @@ class Visualizer extends React.Component {
     this.state = {
       grid: [],
       mouseIsPressed: false,
-      width: 10,
-      height: 10,
+      draggingStart: false,
+      width: 20,
+      height: 20,
       birthLimit: 4,
       deathLimit: 3,
       initChance: 0.45,
-      algo: floodAlgo
+      algo: caveAlgo
     };
 
     this.handleChangeWidth = this.handleChangeWidth.bind(this);
@@ -28,6 +29,8 @@ class Visualizer extends React.Component {
     this.visualizeCaveGeneration = this.visualizeCaveGeneration.bind(this);
     this.nextStepInVisualization = this.nextStepInVisualization.bind(this);
     this.killAllTimeouts = this.killAllTimeouts.bind(this);
+    this.initGridCave = this.initGridCave.bind(this);
+    this.initGridFlood = this.initGridFlood.bind(this);
   }
 
   // create initial grid
@@ -40,16 +43,39 @@ class Visualizer extends React.Component {
     this.setState({ grid });
   }
 
+  initGridCave() {
+    this.setState({ width: 20, height: 20 }, function() {
+      const grid = this.createGrid(true);
+      this.setState({ grid });
+    });
+  }
+
+  initGridFlood() {
+    this.setState({ width: 21, height: 21 }, function() {
+      const grid = this.createGrid(true, true);
+      this.setState({ grid });
+    });
+  }
+
   //// EVENT LISTENERS ////////////////////
   handleMouseDown(row, col) {
-    const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({ grid: newGrid, mouseIsPressed: true });
+    if (this.state.grid[row][col].isStart) {
+      return;
+    } else {
+      const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
+      this.setState({ grid: newGrid, mouseIsPressed: true });
+    }
   }
 
   handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
-    const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({ grid: newGrid });
+    if (this.state.grid[row][col].isStart) return;
+
+    if (this.state.draggingStart) {
+    } else {
+      const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
+      this.setState({ grid: newGrid });
+    }
   }
 
   handleMouseUp() {
@@ -140,44 +166,80 @@ class Visualizer extends React.Component {
   ////////////////////////////////////////
 
   caveGen = () => (
-    <ControlPanel
-      algo={this.state.algo}
-      width={this.state.width}
-      height={this.state.height}
-      onChangeWidth={this.handleChangeWidth}
-      onChangeHeight={this.handleChangeHeight}
-      visualizeCaveGeneration={this.visualizeCaveGeneration}
-      nextStepInVisualization={this.nextStepInVisualization}
-      killAllTimeouts={this.killAllTimeouts}
-    />
+    <>
+      <ControlPanel
+        algo={this.state.algo}
+        width={this.state.width}
+        height={this.state.height}
+        onChangeWidth={this.handleChangeWidth}
+        onChangeHeight={this.handleChangeHeight}
+        visualizeCaveGeneration={this.visualizeCaveGeneration}
+        nextStepInVisualization={this.nextStepInVisualization}
+        killAllTimeouts={this.killAllTimeouts}
+      />
+      <this.gridComponent></this.gridComponent>
+    </>
   );
 
   floodFill = () => (
-    <ControlPanel
-      algo={this.state.algo}
-      width={this.state.width}
-      height={this.state.height}
-      onChangeWidth={this.handleChangeWidth}
-      onChangeHeight={this.handleChangeHeight}
-      visualizeCaveGeneration={this.visualizeCaveGeneration}
-      nextStepInVisualization={this.nextStepInVisualization}
-      killAllTimeouts={this.killAllTimeouts}
-    />
+    <>
+      <ControlPanel
+        algo={this.state.algo}
+        width={this.state.width}
+        height={this.state.height}
+        onChangeWidth={this.handleChangeWidth}
+        onChangeHeight={this.handleChangeHeight}
+        visualizeCaveGeneration={this.visualizeCaveGeneration}
+        nextStepInVisualization={this.nextStepInVisualization}
+        killAllTimeouts={this.killAllTimeouts}
+      />
+      <this.gridComponent></this.gridComponent>
+    </>
+  );
+
+  gridComponent = algo => (
+    <div className="grid">
+      {this.state.grid.map((row, rowIx) => {
+        return (
+          <div key={rowIx} className="rowContainer">
+            {row.map((node, nodeIx) => {
+              const { row, col, isWall, isStart } = node;
+              return (
+                <Node
+                  key={nodeIx}
+                  col={col}
+                  row={row}
+                  isWall={isWall}
+                  isStart={isStart}
+                  mouseIsPressed={this.state.mouseIsPressed}
+                  onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                  onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
+                  onMouseUp={() => this.handleMouseUp()}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
   );
 
   render() {
-    const { grid, mouseIsPressed, width, height, algo } = this.state;
-
+    // const { grid, mouseIsPressed, width, height, algo } = this.state;
     return (
       <>
         <Router>
           <div className="wrapper3">
             <ul>
               <li>
-                <Link to="/cavegen">Cave Generation</Link>
+                <Link to="/cavegen" onClick={this.initGridCave}>
+                  Cave Generation
+                </Link>
               </li>
               <li>
-                <Link to="/floodfill">Flood Fill</Link>
+                <Link to="/floodfill" onClick={this.initGridFlood}>
+                  Flood Fill
+                </Link>
               </li>
             </ul>
           </div>
@@ -185,51 +247,33 @@ class Visualizer extends React.Component {
           <Route exact path="/cavegen" component={this.caveGen} />
           <Route path="/floodfill" component={this.floodFill} />
         </Router>
-
-        <div className="grid">
-          {grid.map((row, rowIx) => {
-            return (
-              <div key={rowIx} className="rowContainer">
-                {row.map((node, nodeIx) => {
-                  const { row, col, isWall } = node;
-                  return (
-                    <Node
-                      key={nodeIx}
-                      col={col}
-                      row={row}
-                      isWall={isWall}
-                      mouseIsPressed={mouseIsPressed}
-                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                      onMouseEnter={(row, col) =>
-                        this.handleMouseEnter(row, col)
-                      }
-                      onMouseUp={() => this.handleMouseUp()}
-                    ></Node>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
       </>
     );
   }
 
   //// GRID FUNCTIONS
-  createNode = (row, col, isEmpty) => {
+  createNode = (row, col, isEmpty, isStart) => {
     return {
       row,
       col,
-      isWall: false
+      isWall: false,
+      isStart: isStart
     };
   };
 
-  createGrid = isEmpty => {
+  createGrid = (isEmpty, isStart = false) => {
     const grid = [];
     for (let row = 0; row < this.state.height; row++) {
       const currentRow = [];
       for (let col = 0; col < this.state.width; col++) {
-        currentRow.push(this.createNode(row, col, isEmpty));
+        let node;
+        if (
+          row === Math.floor(this.state.width / 2) &&
+          col === Math.floor(this.state.width / 2)
+        )
+          node = this.createNode(row, col, isEmpty, isStart);
+        else node = this.createNode(row, col, isEmpty);
+        currentRow.push(node);
       }
       grid.push(currentRow);
     }
@@ -247,12 +291,34 @@ class Visualizer extends React.Component {
     return newGrid;
   };
 
+  getNewGridWithStartToggled = (grid, row, col, val) => {
+    const newGrid = grid.slice();
+    const node = newGrid[row][col];
+    const newNode = {
+      ...node,
+      isStart: val
+    };
+    newGrid[row][col] = newNode;
+    return newGrid;
+  };
+
   setNewGrid = (grid, row, col, val) => {
     const newGrid = grid.slice();
     const node = newGrid[row][col];
     const newNode = {
       ...node,
       isWall: val
+    };
+    newGrid[row][col] = newNode;
+    return newGrid;
+  };
+
+  setNewStart = (grid, row, col, val) => {
+    const newGrid = grid.slice();
+    const node = newGrid[row][col];
+    const newNode = {
+      ...node,
+      istStart: val
     };
     newGrid[row][col] = newNode;
     return newGrid;

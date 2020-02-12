@@ -14,14 +14,14 @@ import "./control-panel.styles.scss";
 class ControlPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.size = 10;
+    this.size = 20;
     this.initChance = 0.45;
 
     this.birthLimit = 4;
     this.deathLimit = 3;
 
     this.state = {
-      size: 10,
+      size: 20,
       initChance: 0.45,
       birthLimit: 4,
       deathLimit: 3
