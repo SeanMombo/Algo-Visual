@@ -1,6 +1,7 @@
 import React from "react";
 import Node from "./node/node.component";
 import { generateCave, initCave } from "../algorithms/cave";
+import { recursiveFloodFill } from "../algorithms/flood";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import "./visualizer.styles.scss";
@@ -187,11 +188,6 @@ class Visualizer extends React.Component {
         algo={this.state.algo}
         width={this.state.width}
         height={this.state.height}
-        onChangeWidth={this.handleChangeWidth}
-        onChangeHeight={this.handleChangeHeight}
-        visualizeCaveGeneration={this.visualizeCaveGeneration}
-        nextStepInVisualization={this.nextStepInVisualization}
-        killAllTimeouts={this.killAllTimeouts}
       />
       <this.gridComponent></this.gridComponent>
     </>

@@ -1,17 +1,35 @@
-export function initCave(grid, WIDTH, HEIGHT, initChance) {
-  const clone = Array.from(Array(HEIGHT), () => new Array(WIDTH));
-  for (let row = 0; row < HEIGHT; row++) {
-    for (let col = 0; col < WIDTH; col++) {
-      console.log(grid[row][col]);
-      console.log(WIDTH, col, HEIGHT, row);
-      Math.random() <= initChance ||
-      row === 0 ||
-      col === 0 ||
-      row === HEIGHT - 1 ||
-      col === WIDTH - 1
-        ? (clone[row][col] = 1)
-        : (clone[row][col] = 0);
+export function recursiveFloodFill(img, r, c, col, newCol) {
+  function neighbours(r, c) {
+    return [
+      [r - 1, c],
+      [r + 1, c],
+      [r, c - 1],
+      [r, c + 1]
+    ];
+  }
+  function key(r, c) {
+    return `${r}-${c}`;
+  }
+
+  const visited = {};
+  const numCol = img[0].length;
+  const numRow = img.length;
+
+  function rec(r, c) {
+    if (r < 0 || r >= numRow) return;
+    if (c < 0 || c >= numCol) return;
+    if (visited[key(r, c)]) return;
+    if (img[r][c] != col) return;
+
+    img[r][c] = newCol;
+    visited[key(r, c)] = 1;
+
+    const moves = neighbours(r, c);
+
+    for (let move of moves) {
+      rec(move[0], move[1]);
     }
   }
-  return clone;
+  rec(r, c);
+  return img;
 }

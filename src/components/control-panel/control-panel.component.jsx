@@ -280,6 +280,25 @@ class ControlPanel extends React.Component {
     </>
   );
 
+  floodFill = () => (
+    <>
+      <h2>Settings</h2>
+      <br></br>
+
+      <h2>Visualize</h2>
+      <br></br>
+      <div className="buttonWrapper">
+        <Button onClick={this.visualizeCaveGeneration} variant="primary">
+          Initialize The Grid
+        </Button>
+
+        <Button onClick={this.killAllTimeouts} variant="danger">
+          Abort Visualization
+        </Button>
+      </div>
+    </>
+  );
+
   render() {
     const { width, height, visualizeCaveGeneration } = this.props;
 
