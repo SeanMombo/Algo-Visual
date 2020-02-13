@@ -15,25 +15,30 @@ class ControlPanel extends React.Component {
   constructor(props) {
     super(props);
     this.size = 20;
-    this.initChance = 0.45;
+    this.speed = 5;
 
+    this.initChance = 0.45;
     this.birthLimit = 4;
     this.deathLimit = 3;
 
     this.state = {
       size: 20,
+      speed: 5,
       initChance: 0.45,
       birthLimit: 4,
       deathLimit: 3
     };
-
+    this.handleChangeSpeed = this.handleChangeSpeed.bind(this);
     this.handleChangeWidth = this.handleChangeWidth.bind(this);
     this.handleChangeHeight = this.handleChangeHeight.bind(this);
+
     this.visualizeCaveGeneration = this.visualizeCaveGeneration.bind(this);
     this.nextStepInVisualization = this.nextStepInVisualization.bind(this);
     this.killAllTimeouts = this.killAllTimeouts.bind(this);
+
     this.visualizeFloodFill = this.visualizeFloodFill.bind(this);
     this.initGridFlood = this.initGridFlood.bind(this);
+    this.clearFlood = this.clearFlood.bind(this);
   }
 
   handleChangeWidth(w) {
@@ -43,17 +48,21 @@ class ControlPanel extends React.Component {
     this.props.onChangeHeight(h);
   }
 
+  handleChangeSpeed(s) {
+    this.props.handleChangeSpeed(s);
+  }
   //// Cave Gen
   visualizeCaveGeneration() {
     this.props.visualizeCaveGeneration(
       this.size,
       this.initChance,
       this.birthLimit,
-      this.deathLimit
+      this.deathLimit,
+      this.speed
     );
   }
   nextStepInVisualization() {
-    this.props.nextStepInVisualization();
+    this.props.nextStepInVisualization(this.speed);
   }
   killAllTimeouts() {
     this.props.killAllTimeouts();
@@ -61,11 +70,38 @@ class ControlPanel extends React.Component {
 
   //// Flood fill
   visualizeFloodFill() {
-    this.props.visualizeFloodFill();
+    this.props.visualizeFloodFill(this.speed);
   }
 
   initGridFlood() {
     this.props.initGridFlood();
+  }
+  clearFlood() {
+    this.props.clearFlood();
+  }
+
+  incSpeed(speed) {
+    this.speed += 1;
+    if (this.speed > 10) this.speed = 10;
+    this.setState({ speed: this.speed });
+  }
+  decSpeed(speed) {
+    this.speed -= 1;
+    if (this.speed < 0) this.speed = 0;
+    this.setState({ speed: this.speed });
+  }
+
+  decDeath() {
+    this.deathLimit -= 1;
+    if (this.deathLimit < 0) this.deathLimit = 0;
+    this.setState({ deathLimit: this.deathLimit });
+  }
+
+  updateSpeed(e) {
+    let speed = e.target.value.replace(/\D/, "");
+    if (speed > 10) speed = 10;
+    this.speed = Number(speed);
+    this.setState({ speed });
   }
 
   updateSize(e) {
@@ -104,7 +140,7 @@ class ControlPanel extends React.Component {
   decSize() {
     this.size -= 5;
 
-    if (this.size < 0) this.size = 0;
+    if (this.size < 5) this.size = 5;
     this.setState({ size: this.size });
   }
 
@@ -143,43 +179,46 @@ class ControlPanel extends React.Component {
     this.setState({ deathLimit: this.deathLimit });
   }
 
+  speedInput = () => (
+    <Form.Group as={Col} controlId="formGridSize">
+      <Form.Label>Visualization Speed</Form.Label>
+      <InputGroup>
+        <InputGroup.Prepend>
+          <Button
+            size="sm"
+            variant="outline-secondary"
+            onClick={this.decSpeed.bind(this)}
+          >
+            -
+          </Button>
+        </InputGroup.Prepend>
+        <Form.Control
+          size="sm"
+          type="text"
+          placeholder="0-100"
+          value={this.state.speed}
+          onChange={this.updateSpeed.bind(this)}
+        />
+        <InputGroup.Append>
+          <Button
+            size="sm"
+            variant="outline-secondary"
+            onClick={this.incSpeed.bind(this)}
+          >
+            +
+          </Button>
+        </InputGroup.Append>
+      </InputGroup>
+    </Form.Group>
+  );
+
   caveGen = () => (
     <>
       <h2>Settings</h2>
       <br></br>
 
       <Form>
-        <Form.Group as={Col} controlId="formGridSize">
-          <Form.Label>Visualization Speed</Form.Label>
-          <InputGroup>
-            <InputGroup.Prepend>
-              <Button
-                size="sm"
-                variant="outline-secondary"
-                onClick={this.decSize.bind(this)}
-              >
-                -
-              </Button>
-            </InputGroup.Prepend>
-            <Form.Control
-              size="sm"
-              type="text"
-              placeholder="0-100"
-              value={this.state.size}
-              onChange={this.updateSize.bind(this)}
-            />
-            <InputGroup.Append>
-              <Button
-                size="sm"
-                variant="outline-secondary"
-                onClick={this.incSize.bind(this)}
-              >
-                +
-              </Button>
-            </InputGroup.Append>
-          </InputGroup>
-        </Form.Group>
-
+        {/* <this.speedInput /> */}
         <Form.Row>
           <Form.Group as={Col} controlId="formGridSize">
             <Form.Label>Grid Size</Form.Label>
@@ -328,19 +367,19 @@ class ControlPanel extends React.Component {
   floodFill = () => (
     <>
       <h2>Settings</h2>
+      <this.speedInput />
       <br></br>
 
       <h2>Visualize</h2>
       <br></br>
       <div className="buttonWrapper">
         <Button onClick={this.visualizeFloodFill} variant="primary">
-          Initialize The Grid
+          Flood Fill
         </Button>
-
-        <Button
-          onClick={this.initGridFlood && this.killAllTimeouts}
-          variant="danger"
-        >
+        <Button onClick={this.clearFlood} variant="danger">
+          Clear Fill
+        </Button>
+        <Button onClick={this.initGridFlood} variant="danger">
           Reset Grid
         </Button>
       </div>
