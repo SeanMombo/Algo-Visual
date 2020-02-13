@@ -54,7 +54,7 @@ class Input extends React.Component {
             type="text"
             value={value}
             placeholder={label}
-            autocomplete="off"
+            autoComplete="off"
             onChange={this.handleChangeWidth}
             onKeyPress={this.handleKeyPress.bind(this)}
           />

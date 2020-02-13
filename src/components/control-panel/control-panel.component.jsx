@@ -32,6 +32,8 @@ class ControlPanel extends React.Component {
     this.visualizeCaveGeneration = this.visualizeCaveGeneration.bind(this);
     this.nextStepInVisualization = this.nextStepInVisualization.bind(this);
     this.killAllTimeouts = this.killAllTimeouts.bind(this);
+    this.visualizeFloodFill = this.visualizeFloodFill.bind(this);
+    this.initGridFlood = this.initGridFlood.bind(this);
   }
 
   handleChangeWidth(w) {
@@ -40,6 +42,8 @@ class ControlPanel extends React.Component {
   handleChangeHeight(h) {
     this.props.onChangeHeight(h);
   }
+
+  //// Cave Gen
   visualizeCaveGeneration() {
     this.props.visualizeCaveGeneration(
       this.size,
@@ -55,12 +59,22 @@ class ControlPanel extends React.Component {
     this.props.killAllTimeouts();
   }
 
+  //// Flood fill
+  visualizeFloodFill() {
+    this.props.visualizeFloodFill();
+  }
+
+  initGridFlood() {
+    this.props.initGridFlood();
+  }
+
   updateSize(e) {
     let size = e.target.value.replace(/\D/, "");
     if (size > 100) size = 100;
     this.size = Number(size);
     this.setState({ size });
   }
+
   updateChance(e) {
     let initChance = e.target.value;
     if (initChance > 1) initChance = 0.45;
@@ -135,6 +149,37 @@ class ControlPanel extends React.Component {
       <br></br>
 
       <Form>
+        <Form.Group as={Col} controlId="formGridSize">
+          <Form.Label>Visualization Speed</Form.Label>
+          <InputGroup>
+            <InputGroup.Prepend>
+              <Button
+                size="sm"
+                variant="outline-secondary"
+                onClick={this.decSize.bind(this)}
+              >
+                -
+              </Button>
+            </InputGroup.Prepend>
+            <Form.Control
+              size="sm"
+              type="text"
+              placeholder="0-100"
+              value={this.state.size}
+              onChange={this.updateSize.bind(this)}
+            />
+            <InputGroup.Append>
+              <Button
+                size="sm"
+                variant="outline-secondary"
+                onClick={this.incSize.bind(this)}
+              >
+                +
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </Form.Group>
+
         <Form.Row>
           <Form.Group as={Col} controlId="formGridSize">
             <Form.Label>Grid Size</Form.Label>
@@ -288,12 +333,15 @@ class ControlPanel extends React.Component {
       <h2>Visualize</h2>
       <br></br>
       <div className="buttonWrapper">
-        <Button onClick={this.visualizeCaveGeneration} variant="primary">
+        <Button onClick={this.visualizeFloodFill} variant="primary">
           Initialize The Grid
         </Button>
 
-        <Button onClick={this.killAllTimeouts} variant="danger">
-          Abort Visualization
+        <Button
+          onClick={this.initGridFlood && this.killAllTimeouts}
+          variant="danger"
+        >
+          Reset Grid
         </Button>
       </div>
     </>

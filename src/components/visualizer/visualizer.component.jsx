@@ -10,11 +10,15 @@ import ControlPanel from "../control-panel/control-panel.component";
 const caveAlgo = 0;
 const floodAlgo = 1;
 
+const fillVal = 2;
+
 class Visualizer extends React.Component {
   constructor() {
     super();
     this.state = {
       grid: [],
+      algo: caveAlgo,
+      speed: 70,
       mouseIsPressed: false,
       draggingStart: false,
       width: 20,
@@ -22,7 +26,8 @@ class Visualizer extends React.Component {
       birthLimit: 4,
       deathLimit: 3,
       initChance: 0.45,
-      algo: caveAlgo
+      startR: 0,
+      startC: 0
     };
 
     this.handleChangeWidth = this.handleChangeWidth.bind(this);
@@ -32,6 +37,8 @@ class Visualizer extends React.Component {
     this.killAllTimeouts = this.killAllTimeouts.bind(this);
     this.initGridCave = this.initGridCave.bind(this);
     this.initGridFlood = this.initGridFlood.bind(this);
+
+    this.visualizeFloodFill = this.visualizeFloodFill.bind(this);
   }
 
   // create initial grid
@@ -45,6 +52,7 @@ class Visualizer extends React.Component {
   }
 
   initGridCave() {
+    this.killAllTimeouts();
     this.setState({ width: 20, height: 20 }, function() {
       const grid = this.createGrid(true);
       this.setState({ grid });
@@ -52,6 +60,7 @@ class Visualizer extends React.Component {
   }
 
   initGridFlood() {
+    this.killAllTimeouts();
     this.setState({ width: 21, height: 21 }, function() {
       const grid = this.createGrid(true, true);
       this.setState({ grid });
@@ -129,7 +138,10 @@ class Visualizer extends React.Component {
 
   animateCaveGeneration(boolGrid) {
     // const t = 0.5;
-    const t = Math.min(70, 1000 / (this.state.width * this.state.width));
+    const t = Math.min(
+      this.state.speed,
+      1000 / (this.state.width * this.state.width)
+    );
     for (let row = 0; row < this.state.height; row++) {
       for (let col = 0; col < this.state.width; col++) {
         const val = boolGrid[row][col];
@@ -158,10 +170,60 @@ class Visualizer extends React.Component {
     setTimeout(() => {
       for (let row = 0; row < this.state.height; row++) {
         for (let col = 0; col < this.state.width; col++) {
-          this.setNewGrid(this.state.grid, row, col, boolGrid[row][col]);
+          const g = this.setNewGrid(
+            this.state.grid,
+            row,
+            col,
+            boolGrid[row][col],
+            false
+          );
         }
       }
     }, t * this.state.height * this.state.width);
+  }
+
+  visualizeFloodFill() {
+    const { grid, startR, startC } = this.state;
+    const traversalStack = recursiveFloodFill(grid, startR, startC, 0, fillVal);
+    this.animateFloodFill(traversalStack);
+  }
+
+  animateFloodFill(traversalStack) {
+    // const t = 0.5;
+    const t = Math.max(
+      this.state.speed,
+      1000 / (this.state.width * this.state.width)
+    );
+    for (let i = 0; i < traversalStack.length; i++) {
+      const node = traversalStack[i];
+      const m1 = node[0],
+        m2 = node[1];
+      const el = document.getElementById(`node-${m1}-${m2}`);
+      console.log(m1, m2, el);
+      setTimeout(() => {
+        if (el) {
+          if (!this.state.grid[m1][m2].isStart) el.classList.add("isFilled");
+        }
+      }, t * i);
+    }
+
+    //// update state ONLY AFTER the visualization has completed, not constantly during it.
+    setTimeout(() => {
+      for (let i = 0; i < traversalStack.length; i++) {
+        const node = traversalStack[i];
+        const m1 = node[0],
+          m2 = node[1];
+        this.setNewGrid(
+          this.state.grid,
+          m1,
+          m2,
+          // this.state.grid[m1][m2].isWall,
+          false,
+          true
+        );
+      }
+      console.log(this.state.grid);
+    }, t * traversalStack.length);
   }
 
   ////////////////////////////////////////
@@ -188,6 +250,9 @@ class Visualizer extends React.Component {
         algo={this.state.algo}
         width={this.state.width}
         height={this.state.height}
+        visualizeFloodFill={this.visualizeFloodFill}
+        initGridFlood={this.initGridFlood}
+        killAllTimeouts={this.killAllTimeouts}
       />
       <this.gridComponent></this.gridComponent>
     </>
@@ -199,7 +264,7 @@ class Visualizer extends React.Component {
         return (
           <div key={rowIx} className="rowContainer">
             {row.map((node, nodeIx) => {
-              const { row, col, isWall, isStart } = node;
+              const { row, col, isWall, isStart, isFilled } = node;
               return (
                 <Node
                   key={nodeIx}
@@ -207,6 +272,7 @@ class Visualizer extends React.Component {
                   row={row}
                   isWall={isWall}
                   isStart={isStart}
+                  isFilled={isFilled}
                   mouseIsPressed={this.state.mouseIsPressed}
                   onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                   onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
@@ -253,7 +319,8 @@ class Visualizer extends React.Component {
       row,
       col,
       isWall: false,
-      isStart: isStart
+      isStart: isStart,
+      isFilled: false
     };
   };
 
@@ -266,9 +333,10 @@ class Visualizer extends React.Component {
         if (
           row === Math.floor(this.state.width / 2) &&
           col === Math.floor(this.state.width / 2)
-        )
+        ) {
           node = this.createNode(row, col, isEmpty, isStart);
-        else node = this.createNode(row, col, isEmpty);
+          this.setState({ startR: row, startC: col });
+        } else node = this.createNode(row, col, isEmpty);
         currentRow.push(node);
       }
       grid.push(currentRow);
@@ -298,12 +366,13 @@ class Visualizer extends React.Component {
     return newGrid;
   };
 
-  setNewGrid = (grid, row, col, val) => {
+  setNewGrid = (grid, row, col, isWall, isFilled) => {
     const newGrid = grid.slice();
     const node = newGrid[row][col];
     const newNode = {
       ...node,
-      isWall: val
+      isWall: isWall,
+      isFilled: isFilled
     };
     newGrid[row][col] = newNode;
     return newGrid;
