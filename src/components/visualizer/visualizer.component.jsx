@@ -224,7 +224,12 @@ class Visualizer extends React.Component {
             this.state.grid,
             row,
             col,
-            boolGrid[row][col],
+            row === 0 ||
+              col === 0 ||
+              row === this.state.width - 1 ||
+              col === this.state.width - 1
+              ? 1
+              : boolGrid[row][col],
             false
           );
         }

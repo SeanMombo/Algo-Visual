@@ -22,6 +22,8 @@ $green: #14a76c;
 .wall {
   border: 0.5px dashed rgb(41, 41, 41);
   background: black;
+  animation-name: appear;
+  animation-duration: 0.2s;
 }
 
 .visited {
@@ -35,4 +37,21 @@ $green: #14a76c;
 
 .isFilled {
   background: rgb(185, 8, 91);
+  animation-timing-function: ease-out;
+  animation-name: appear;
+  animation-duration: 0.2s;
+}
+
+@keyframes appear {
+  0% {
+    transform: scale(0.25);
+  }
+
+  60% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
