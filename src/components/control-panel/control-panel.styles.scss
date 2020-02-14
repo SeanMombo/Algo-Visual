@@ -3,15 +3,18 @@ $grey: #d3d3d3;
 $orange: #ff652f;
 $yellow: #ffe400;
 $green: #14a76c;
-
+#speedcol {
+  padding: 0px !important;
+}
 .control-panel {
   // border: 1px dashed rgb(30, 151, 91);
   min-width: 30%;
   max-width: 40%;
   background-color: $grey;
   padding: 16px;
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 20px;
+
   // display: flex;
   // align-content: center;
   // justify-content: flex-start;
@@ -23,10 +26,23 @@ $green: #14a76c;
   -moz-border-radius: 4px;
   overflow: hidden;
 
+  // .dropdown {
+  //   text-align: left;
+  //   button {
+  //     width: 100% !important;
+  //   }
+  // }
+  label {
+    font-weight: bold;
+  }
   input {
     width: 80%;
     padding: 4px !important;
   }
+  #default-checkbox {
+    width: auto;
+  }
+
   .input-group-text {
   }
   .bg {
@@ -38,11 +54,13 @@ $green: #14a76c;
 
   .form-group {
     // text-align: left !important;
+    padding: 0px 8px 0px 8px;
 
     button {
       width: 30px !important;
       font-weight: bold;
     }
+    margin-bottom: 0px;
   }
   .inputLabel {
     font-weight: bold;

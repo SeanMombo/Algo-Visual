@@ -26,7 +26,8 @@ class ControlPanel extends React.Component {
       speed: 5,
       initChance: 0.45,
       birthLimit: 4,
-      deathLimit: 3
+      deathLimit: 3,
+      floodType: 0
     };
     this.handleChangeSpeed = this.handleChangeSpeed.bind(this);
     this.handleChangeWidth = this.handleChangeWidth.bind(this);
@@ -70,7 +71,7 @@ class ControlPanel extends React.Component {
 
   //// Flood fill
   visualizeFloodFill() {
-    this.props.visualizeFloodFill(this.speed);
+    this.props.visualizeFloodFill(this.speed, this.state.floodType);
   }
 
   initGridFlood() {
@@ -180,7 +181,7 @@ class ControlPanel extends React.Component {
   }
 
   speedInput = () => (
-    <Form.Group as={Col} controlId="formGridSize">
+    <Form.Group id="speedcol" as={Col} controlId="formGridSize">
       <Form.Label>Visualization Speed</Form.Label>
       <InputGroup>
         <InputGroup.Prepend>
@@ -215,7 +216,7 @@ class ControlPanel extends React.Component {
   caveGen = () => (
     <>
       <h2>Settings</h2>
-      <br></br>
+      <hr />
 
       <Form>
         {/* <this.speedInput /> */}
@@ -347,9 +348,9 @@ class ControlPanel extends React.Component {
           </Form.Group>
         </Form.Row>
       </Form>
-
+      <hr />
       <h2>Visualize</h2>
-      <br></br>
+      <hr />
       <div className="buttonWrapper">
         <Button onClick={this.visualizeCaveGeneration} variant="primary">
           Initialize The Grid
@@ -364,14 +365,29 @@ class ControlPanel extends React.Component {
     </>
   );
 
+  handleFloodType = e => {
+    this.setState({ floodType: Number(e.target.value) });
+  };
+
   floodFill = () => (
     <>
       <h2>Settings</h2>
+      <hr />
       <this.speedInput />
-      <br></br>
-
+      <div>
+        <label>Implementation Type</label>
+        <select
+          className="browser-default custom-select"
+          onChange={this.handleFloodType}
+        >
+          <option value="0">Stack</option>
+          <option value="1">Queue</option>
+        </select>
+      </div>
+      <hr />
       <h2>Visualize</h2>
-      <br></br>
+      <hr />
+
       <div className="buttonWrapper">
         <Button onClick={this.visualizeFloodFill} variant="primary">
           Flood Fill

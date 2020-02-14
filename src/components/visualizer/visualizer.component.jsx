@@ -1,7 +1,7 @@
 import React from "react";
 import Node from "./node/node.component";
 import { generateCave, initCave } from "../algorithms/cave";
-import { recursiveFloodFill } from "../algorithms/flood";
+import { recursiveFloodFill, iterativeFloodFill } from "../algorithms/flood";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import "./visualizer.styles.scss";
@@ -18,9 +18,10 @@ class Visualizer extends React.Component {
     this.state = {
       grid: [],
       algo: caveAlgo,
+      floodType: 0, //0 is recursive (stack), 1 is iterative (queue)
       speed: 70,
       mouseIsPressed: false,
-      pressedType: 0,
+      pressedType: false,
       draggingStart: false,
       width: 20,
       height: 20,
@@ -102,9 +103,10 @@ class Visualizer extends React.Component {
     if (this.state.grid[row][col].isStart) {
       return;
     } else {
-      let val = this.state.grid[row][col].isWall;
-      if (val === false) val = 1;
-      else val = 0;
+      let val = !this.state.grid[row][col].isWall;
+      console.log(val);
+      // if (val === false) val = 1;
+      // else val = 0;
 
       const newGrid = this.getNewGridWithWallToggled(
         this.state.grid,
@@ -133,7 +135,7 @@ class Visualizer extends React.Component {
   }
 
   handleMouseUp() {
-    this.setState({ mouseIsPressed: false, pressedType: 0 });
+    this.setState({ mouseIsPressed: false, pressedType: false });
   }
 
   handleChangeWidth(w) {
@@ -237,17 +239,14 @@ class Visualizer extends React.Component {
     }, t * this.state.height * this.state.width);
   }
 
-  visualizeFloodFill(speed) {
-    this.setState({ speed }, function() {
-      console.log(this.state.speed);
+  visualizeFloodFill(speed, floodType) {
+    this.clearFlood();
+
+    this.setState({ speed, floodType }, function() {
+      console.log(floodType);
       const { grid, startR, startC } = this.state;
-      const traversalStack = recursiveFloodFill(
-        grid,
-        startR,
-        startC,
-        0,
-        fillVal
-      );
+      let fn = floodType === 0 ? recursiveFloodFill : iterativeFloodFill;
+      const traversalStack = fn(grid, startR, startC, 0, fillVal);
       this.animateFloodFill(traversalStack);
     });
   }
