@@ -27,7 +27,7 @@ class ControlPanel extends React.Component {
       initChance: 0.45,
       birthLimit: 4,
       deathLimit: 3,
-      floodType: 0
+      floodType: 0,
     };
     this.handleChangeSpeed = this.handleChangeSpeed.bind(this);
     this.handleChangeWidth = this.handleChangeWidth.bind(this);
@@ -365,7 +365,7 @@ class ControlPanel extends React.Component {
     </>
   );
 
-  handleFloodType = e => {
+  handleFloodType = (e) => {
     this.setState({ floodType: Number(e.target.value) });
   };
 
