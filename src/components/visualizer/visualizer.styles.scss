@@ -10,19 +10,25 @@ body {
 
 .wrapper3 {
   width: 100%;
+  height:100px;
   text-align: left;
   margin-bottom: 24px;
-  padding: 16px;
+  // padding: 16px;
   padding-bottom: 8px;
   border-bottom: 1px dashed rgb(155, 153, 153);
-  padding-left: 50px;
+  // padding-left: 50px;
   overflow: hidden;
 }
 
 .grid {
+  
   margin: auto;
-  width: 50%;
-  // height: 100%;
+  width: calc(100vh - 64px - 100px);
+  
+  // flex:1;
+  // height:90%;
+  // max-height: 100%;
+  // margin-left: 180px;
   border: 2px solid black;
   border-radius: 4px;
   -moz-border-radius: 4px;
@@ -39,9 +45,23 @@ body {
   justify-content: space-around;
 }
 
-.wrapper2 {
-  margin: 50px;
+.vis-wrapper {
+  margin: 32px;
   margin-top: 0px;
+  height: calc(100vh - 64px - 100px);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+  h2 {
+    width: 100%;
+  }
+}
+
+
+.main-container {
+  width:100%;
+  height: calc(100vh - 64px - 100px);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;

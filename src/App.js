@@ -12,21 +12,20 @@ class App extends React.Component {
   }
 
   handleChangeWidth(w) {
-    let wid = w;
-    this.setState({ width: w });
+    let width = w;
+    this.setState({
+      width: w
+    });
   }
   render() {
     return (
-      // <BasicExample />
       <div className="App">
-        {/* <div className="wrapper3">Title Here</div> */}
 
-        {/* <div> */}
-        <div className="wrapper2">
+        <div className="vis-wrapper">
           <Visualizer />
         </div>
       </div>
-      // </div>
+
     );
   }
 }

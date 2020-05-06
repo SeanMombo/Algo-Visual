@@ -6,23 +6,21 @@ $green: #14a76c;
 
 .control-panel {
   // border: 1px dashed rgb(30, 151, 91);
-  min-width: 30%;
-  max-width: 40%;
+  // min-width: 30%;
+  // max-width: 40%;
   background-color: $grey;
   padding: 16px;
   padding-top: 20px;
   padding-bottom: 20px;
-  // display: flex;
-  // align-content: center;
-  // justify-content: flex-start;
-  // flex-direction: column;
 
   border: 2px solid rgb(0, 0, 0);
 
   border-radius: 4px;
   -moz-border-radius: 4px;
   overflow: hidden;
-
+  
+  float: left;
+  width: 300px;
   input {
     width: 80%;
     padding: 4px !important;
@@ -30,14 +28,13 @@ $green: #14a76c;
   .input-group-text {
   }
   .bg {
-    // width: 100% !important;
+
   }
   .input-group {
     width: 100% !important;
   }
 
   .form-group {
-    // text-align: left !important;
 
     button {
       width: 30px !important;
@@ -64,42 +61,43 @@ $green: #14a76c;
   }
 
   * {
-    // color: $orange;
-    // text-align: left;
     h1 {
       text-align: center !important;
     }
   }
-  // .form-inline {
-  //   width: 70%;
-  // }
+}
 
-  // .form-group {
-  //   width: 70%;
-  // }
-
-  // .input-group {
-  //   width: 50% !important;
-  // }
-
-  // .form-control {
-  //   width: 40% !important;
-  // }
-
-  // span.input-group-addon {
-  //   width: 50px !important;
-  // }
+@media (min-width: 768px) and (max-width: 1280px) {
+  .main-container {
+    // display: flex;
+    padding: 4px;
+    margin: 4px;
+  }
+  .grid {
+    margin:auto;
+    width:50%;
+    // flex: 2;
+    order: 2;
+    
+    // margin-left: 0;
+  }
+  .control-panel {
+    // flex: 1;
+  }
 }
 
 @media (min-width: 500px) and (max-width: 768px) {
-  .wrapper2 {
+  .vis-wrapper {
+    display: flex;
     padding: 4px;
+    
     margin: 4px;
   }
   .grid {
     flex: 1;
     order: 2;
     width: 100%;
+    margin-left: 0;
   }
   .control-panel {
     padding: 10px;
@@ -110,10 +108,7 @@ $green: #14a76c;
     line-height: 10px;
 
     .form-group {
-      // padding: 0px;
-      // margin: 0px;
-      // margin-left: 16px;
-      // margin-right: 16px;
+
 
       .col {
         margin: 0px !important;
@@ -134,7 +129,8 @@ $green: #14a76c;
 }
 
 @media (max-width: 500px) {
-  .wrapper2 {
+  .vis-wrapper {
+    display: flex;
     padding: 4px;
     margin: 4px;
   }
@@ -142,6 +138,7 @@ $green: #14a76c;
     flex: 1;
     order: 2;
     width: 100%;
+    margin-left: 0;
   }
   .control-panel {
     padding: 10px;

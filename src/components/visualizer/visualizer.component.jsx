@@ -56,7 +56,7 @@ class Visualizer extends React.Component {
 
   initGridCave() {
     this.killAllTimeouts();
-    this.setState({ width: 20, height: 20 }, function() {
+    this.setState({ width: 20, height: 20 }, function () {
       const grid = this.createGrid(true);
       this.setState({ grid });
     });
@@ -71,7 +71,7 @@ class Visualizer extends React.Component {
     });
 
     this.killAllTimeouts();
-    this.setState({ width: 21, height: 21 }, function() {
+    this.setState({ width: 21, height: 21 }, function () {
       const grid = this.createGrid(true, true);
       this.setState({ grid });
     });
@@ -157,9 +157,9 @@ class Visualizer extends React.Component {
   visualizeCaveGeneration(w, initChance, birthLimit, deathLimit, speed) {
     this.setState(
       { width: w, height: w, birthLimit, deathLimit, initChance, speed },
-      function() {
+      function () {
         const grid = this.createGrid(true);
-        this.setState({ grid }, function() {
+        this.setState({ grid }, function () {
           const boolGrid = initCave(
             this.state.grid,
             this.state.width,
@@ -173,7 +173,7 @@ class Visualizer extends React.Component {
   }
 
   nextStepInVisualization(speed) {
-    this.setState({ speed }, function() {
+    this.setState({ speed }, function () {
       const boolGrid = generateCave(
         this.state.grid,
         this.state.width,
@@ -238,7 +238,7 @@ class Visualizer extends React.Component {
   }
 
   visualizeFloodFill(speed) {
-    this.setState({ speed }, function() {
+    this.setState({ speed }, function () {
       console.log(this.state.speed);
       const { grid, startR, startC } = this.state;
       const traversalStack = recursiveFloodFill(
@@ -294,7 +294,7 @@ class Visualizer extends React.Component {
   ////////////////////////////////////////
 
   caveGen = () => (
-    <>
+    <div className="main-container">
       <ControlPanel
         algo={this.state.algo}
         width={this.state.width}
@@ -307,11 +307,12 @@ class Visualizer extends React.Component {
         killAllTimeouts={this.killAllTimeouts}
       />
       <this.gridComponent></this.gridComponent>
-    </>
+    </div>
+
   );
 
   floodFill = () => (
-    <>
+    <div className="main-container">
       <ControlPanel
         algo={this.state.algo}
         width={this.state.width}
@@ -323,7 +324,7 @@ class Visualizer extends React.Component {
         killAllTimeouts={this.killAllTimeouts}
       />
       <this.gridComponent></this.gridComponent>
-    </>
+    </div>
   );
 
   gridComponent = algo => (
