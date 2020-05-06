@@ -3,28 +3,55 @@ $grey: #d3d3d3;
 $orange: #ff652f;
 $yellow: #ffe400;
 $green: #14a76c;
-
+#speedcol {
+  padding: 0px !important;
+}
 .control-panel {
   // border: 1px dashed rgb(30, 151, 91);
   // min-width: 30%;
   // max-width: 40%;
   background-color: $grey;
   padding: 16px;
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 20px;
+<<<<<<< HEAD
+=======
+
+  // display: flex;
+  // align-content: center;
+  // justify-content: flex-start;
+  // flex-direction: column;
+>>>>>>> a59044b5f31953e340f2b2290cf028301057bfe2
 
   border: 2px solid rgb(0, 0, 0);
 
   border-radius: 4px;
   -moz-border-radius: 4px;
   overflow: hidden;
+<<<<<<< HEAD
   
   float: left;
   width: 300px;
+=======
+
+  // .dropdown {
+  //   text-align: left;
+  //   button {
+  //     width: 100% !important;
+  //   }
+  // }
+  label {
+    font-weight: bold;
+  }
+>>>>>>> a59044b5f31953e340f2b2290cf028301057bfe2
   input {
     width: 80%;
     padding: 4px !important;
   }
+  #default-checkbox {
+    width: auto;
+  }
+
   .input-group-text {
   }
   .bg {
@@ -35,11 +62,17 @@ $green: #14a76c;
   }
 
   .form-group {
+<<<<<<< HEAD
+=======
+    // text-align: left !important;
+    padding: 0px 8px 0px 8px;
+>>>>>>> a59044b5f31953e340f2b2290cf028301057bfe2
 
     button {
       width: 30px !important;
       font-weight: bold;
     }
+    margin-bottom: 0px;
   }
   .inputLabel {
     font-weight: bold;
