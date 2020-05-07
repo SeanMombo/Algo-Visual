@@ -23,7 +23,7 @@ $green: #14a76c;
   border: 0.5px dashed rgb(41, 41, 41);
   background: black;
   animation-name: appear;
-  animation-duration: 0.2s;
+  animation-duration: 0.15s;
 }
 
 .visited {
@@ -38,7 +38,7 @@ $green: #14a76c;
 .isFilled {
   background: rgb(185, 8, 91);
   animation-timing-function: ease-out;
-  animation-name: appear;
+  animation-name: appearFlood;
   animation-duration: 0.2s;
 }
 
@@ -53,5 +53,21 @@ $green: #14a76c;
 
   100% {
     transform: scale(1);
+  }
+}
+
+$green:rgb(108, 241, 90);
+@keyframes appearFlood {
+  0% {
+    transform: scale(0.25);
+  }
+
+  60% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+    
   }
 }

@@ -14,7 +14,7 @@ import "./control-panel.styles.scss";
 class ControlPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.size = 20;
+    this.size = 35;
     this.speed = 5;
 
     this.initChance = 0.45;
@@ -22,7 +22,7 @@ class ControlPanel extends React.Component {
     this.deathLimit = 3;
 
     this.state = {
-      size: 20,
+      size: 35,
       speed: 5,
       initChance: 0.45,
       birthLimit: 4,
@@ -174,11 +174,7 @@ class ControlPanel extends React.Component {
     if (this.deathLimit > 8) this.deathLimit = 8;
     this.setState({ deathLimit: this.deathLimit });
   }
-  decDeath() {
-    this.deathLimit -= 1;
-    if (this.deathLimit < 0) this.deathLimit = 0;
-    this.setState({ deathLimit: this.deathLimit });
-  }
+
 
   speedInput = () => (
     <Form.Group id="speedcol" as={Col} controlId="formGridSize">

@@ -23,8 +23,8 @@ class Visualizer extends React.Component {
       mouseIsPressed: false,
       pressedType: false,
       draggingStart: false,
-      width: 20,
-      height: 20,
+      width: 21,
+      height: 21,
       birthLimit: 4,
       deathLimit: 3,
       initChance: 0.45,
@@ -47,7 +47,14 @@ class Visualizer extends React.Component {
 
   // create initial grid
   componentDidMount() {
-    this.initGrid(true);
+    const currentRoute = window.location.pathname;
+    if (currentRoute === "/floodfill") {
+      this.setState({ algo: floodAlgo }, function () {
+        this.initGridFlood();
+      });
+    } else {
+      this.initGridCave();
+    }
   }
 
   initGrid(isEmpty) {
@@ -57,7 +64,7 @@ class Visualizer extends React.Component {
 
   initGridCave() {
     this.killAllTimeouts();
-    this.setState({ width: 20, height: 20 }, function () {
+    this.setState({ width: 21, height: 21 }, function () {
       const grid = this.createGrid(true);
       this.setState({ grid });
     });
@@ -190,8 +197,7 @@ class Visualizer extends React.Component {
   animateCaveGeneration(boolGrid) {
     // const t = 0.5;
 
-    const mapRange = (value, x1, y1, x2, y2) =>
-      ((value - x1) * (y2 - x2)) / (y1 - x1) + x2;
+
     const t = Math.min(70, 1000 / this.state.width / this.state.width);
 
     for (let row = 0; row < this.state.height; row++) {
@@ -239,17 +245,11 @@ class Visualizer extends React.Component {
     }, t * this.state.height * this.state.width);
   }
 
-<<<<<<< HEAD
-  visualizeFloodFill(speed) {
-    this.setState({ speed }, function () {
-      console.log(this.state.speed);
-=======
   visualizeFloodFill(speed, floodType) {
     this.clearFlood();
 
-    this.setState({ speed, floodType }, function() {
+    this.setState({ speed, floodType }, function () {
       console.log(floodType);
->>>>>>> a59044b5f31953e340f2b2290cf028301057bfe2
       const { grid, startR, startC } = this.state;
       let fn = floodType === 0 ? recursiveFloodFill : iterativeFloodFill;
       const traversalStack = fn(grid, startR, startC, 0, fillVal);
@@ -257,13 +257,15 @@ class Visualizer extends React.Component {
     });
   }
 
+  mapRange = (value, x1, y1, x2, y2) =>
+    ((value - x1) * (y2 - x2)) / (y1 - x1) + x2;
+
   animateFloodFill(traversalStack) {
     // const t = 10; 200
 
-    const mapRange = (value, x1, y1, x2, y2) =>
-      ((value - x1) * (y2 - x2)) / (y1 - x1) + x2;
 
-    const t = mapRange(10 - this.state.speed, 0, 10, 5, 200);
+
+    const t = this.mapRange(10 - this.state.speed, 0, 10, 5, 50);
 
     for (let i = 0; i < traversalStack.length; i++) {
       const node = traversalStack[i];
