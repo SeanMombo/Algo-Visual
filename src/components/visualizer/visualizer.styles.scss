@@ -8,16 +8,68 @@ body {
   background-color: $bg;
 }
 
-.wrapper3 {
+h1 {
+  text-align: left !important;
+  width:unset !important;
+}
+
+.header-nav {
   width: 100%;
-  height:100px;
+  
   text-align: left;
   margin-bottom: 24px;
   // padding: 16px;
   padding-bottom: 8px;
   border-bottom: 1px dashed rgb(155, 153, 153);
   // padding-left: 50px;
-  overflow: hidden;
+  overflow-y: hidden;
+
+  .header-nav2 {
+    display:flex;
+
+  }
+
+  display:flex;
+  flex-direction: row;
+
+  align-content: center;
+  flex-wrap: wrap;
+
+  a {
+    margin:16px;
+    margin-left:0;
+    margin-bottom:-12px;
+    color: white;
+  }
+  Button {
+    border-width: 2px;
+    width:130px;
+    height:51px;
+    font-size:20px;
+  }
+
+  $grey: #d3d3d3;
+  .btn-primary {
+    // background-color: $grey;
+    // color:black;
+  }
+
+  .btn-outline-primary {
+    // background-color: $grey;
+    border-color:black;
+    color:black;
+    &:hover {
+      color:white;
+      border-color:rgb(2, 123, 247);
+    }
+  }
+
+  h3 {
+    margin:16px;
+    margin-left:0;
+    
+    vertical-align: baseline;
+  }
 }
 
 .grid {

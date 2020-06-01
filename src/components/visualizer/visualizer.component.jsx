@@ -3,7 +3,7 @@ import Node from "./node/node.component";
 import { generateCave, initCave } from "../algorithms/cave";
 import { recursiveFloodFill, iterativeFloodFill } from "../algorithms/flood";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-
+import { Button } from 'react-bootstrap'
 import "./visualizer.styles.scss";
 import ControlPanel from "../control-panel/control-panel.component";
 
@@ -45,6 +45,7 @@ class Visualizer extends React.Component {
     this.clearFlood = this.clearFlood.bind(this);
   }
 
+
   // create initial grid
   componentDidMount() {
     const currentRoute = window.location.pathname;
@@ -64,7 +65,7 @@ class Visualizer extends React.Component {
 
   initGridCave() {
     this.killAllTimeouts();
-    this.setState({ width: 21, height: 21 }, function () {
+    this.setState({ width: 21, height: 21, algo: caveAlgo }, function () {
       const grid = this.createGrid(true);
       this.setState({ grid });
     });
@@ -79,7 +80,7 @@ class Visualizer extends React.Component {
     });
 
     this.killAllTimeouts();
-    this.setState({ width: 21, height: 21 }, function () {
+    this.setState({ width: 21, height: 21, algo: floodAlgo }, function () {
       const grid = this.createGrid(true, true);
       this.setState({ grid });
     });
@@ -363,23 +364,29 @@ class Visualizer extends React.Component {
   );
 
   render() {
-    // const { grid, mouseIsPressed, width, height, algo } = this.state;
+    const { grid, mouseIsPressed, width, height, algo } = this.state;
     return (
       <>
         <Router>
-          <div className="wrapper3">
-            <ul>
-              <li>
-                <Link to="/cavegen" onClick={this.initGridCave}>
-                  Cave Generation
-                </Link>
-              </li>
-              <li>
-                <Link to="/floodfill" onClick={this.initGridFlood}>
-                  Flood Fill
-                </Link>
-              </li>
-            </ul>
+          {/* <h1>Algo-Interactive</h1> */}
+          <div className="header-nav">
+
+            {/* <div className="header-nav2"> */}
+            {/* <h3>Select an Algorithm:</h3> */}
+            <Link to="/cavegen" onClick={this.initGridCave}>
+              {
+                algo === caveAlgo ? (<Button variant="primary">Cave Gen</Button>) : <Button variant="outline-primary">Cave Gen</Button>
+              }
+            </Link>
+
+            <Link to="/floodfill" onClick={this.initGridFlood}>
+              {
+                algo === floodAlgo ? (<Button variant="primary">Flood-fill</Button>) : <Button variant="outline-primary">Flood-fill</Button>
+              }
+
+            </Link>
+            {/* </div> */}
+
           </div>
 
           <Route exact path="/cavegen" component={this.caveGen} />
