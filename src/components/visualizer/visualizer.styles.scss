@@ -8,7 +8,7 @@ body {
   background-color: $bg;
 }
 
-h1 {
+h1, h4 {
   text-align: left !important;
   width:unset !important;
 }
@@ -100,7 +100,7 @@ h1 {
 .vis-wrapper {
   margin: 32px;
   margin-top: 0px;
-  height: calc(100vh - 64px - 100px);
+  // height: calc(100vh - 64px - 100px);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;

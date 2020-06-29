@@ -403,7 +403,7 @@ class ControlPanel extends React.Component {
 
     return (
       <div className="control-panel">
-        <Router>
+        <Router basename={'Algo-Visual'}>
           <Route exact path="/cavegen" component={this.caveGen} />
           <Route path="/floodfill" component={this.floodFill} />
         </Router>

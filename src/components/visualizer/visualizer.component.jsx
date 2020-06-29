@@ -17,7 +17,7 @@ class Visualizer extends React.Component {
     super();
     this.state = {
       grid: [],
-      algo: caveAlgo,
+      algo: null,
       floodType: 0, //0 is recursive (stack), 1 is iterative (queue)
       speed: 70,
       mouseIsPressed: false,
@@ -49,11 +49,12 @@ class Visualizer extends React.Component {
   // create initial grid
   componentDidMount() {
     const currentRoute = window.location.pathname;
-    if (currentRoute === "/floodfill") {
+    console.log(currentRoute)
+    if (currentRoute === "/Algo-Visual/floodfill") {
       this.setState({ algo: floodAlgo }, function () {
         this.initGridFlood();
       });
-    } else {
+    } else if (currentRoute === "/Algo-Visual/cavegen") {
       this.initGridCave();
     }
   }
@@ -363,38 +364,51 @@ class Visualizer extends React.Component {
     </div>
   );
 
+  GreetingComponent = () => (
+
+    <h1>Algo-Visual</h1>
+
+  )
+
   render() {
     const { grid, mouseIsPressed, width, height, algo } = this.state;
     return (
       <>
-        <Router>
+        <Router basename={'Algo-Visual'}>
           {/* <h1>Algo-Interactive</h1> */}
+          <Route path="/" component={this.GreetingComponent} />
           <div className="header-nav">
 
             {/* <div className="header-nav2"> */}
             {/* <h3>Select an Algorithm:</h3> */}
             <Link to="/cavegen" onClick={this.initGridCave}>
               {
-                algo === caveAlgo ? (<Button variant="primary">Cave Gen</Button>) : <Button variant="outline-primary">Cave Gen</Button>
+                algo === null ? <Button variant="outline-primary">Cave Gen</Button> : algo === caveAlgo ? (<Button variant="primary">Cave Gen</Button>) : <Button variant="outline-primary">Cave Gen</Button>
               }
             </Link>
 
             <Link to="/floodfill" onClick={this.initGridFlood}>
               {
-                algo === floodAlgo ? (<Button variant="primary">Flood-fill</Button>) : <Button variant="outline-primary">Flood-fill</Button>
+                algo === null ? <Button variant="outline-primary">Flood-fill</Button> : algo === floodAlgo ? (<Button variant="primary">Flood-fill</Button>) : <Button variant="outline-primary">Flood-fill</Button>
               }
 
             </Link>
             {/* </div> */}
-
           </div>
+          <h4>
+            {
+              algo === null ? "Choose an algorithm" : ""
+            }
+          </h4>
 
-          <Route exact path="/cavegen" component={this.caveGen} />
+          <Route path="/cavegen" component={this.caveGen} />
           <Route path="/floodfill" component={this.floodFill} />
+
         </Router>
       </>
     );
   }
+
 
   //// GRID FUNCTIONS
   createNode = (row, col, isEmpty, isStart) => {
