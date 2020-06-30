@@ -11,3 +11,8 @@ Currently two algorithms are visualized:
 ## Cave Generation
 There is an excellent article explaining the logic behind the cellular automata cave generation method here:
 https://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664
+
+## Technologies
+- JavaScript
+- HTML + SCSS
+- React
