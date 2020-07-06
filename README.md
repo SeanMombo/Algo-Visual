@@ -3,6 +3,9 @@
 ## Description
 Algorithms can be difficult to visualize in your head. Algo-Visual has a simple interface that allows you to observe algorithms in action!
 
+## Live Project
+http://seanmombo.com/Algo-Visual/
+
 ## Visualizations
 Currently two algorithms are visualized: 
 - Cellular Automata Cave Generation
